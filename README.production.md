@@ -1,23 +1,17 @@
-# API Server - Production Hardening
+# Mobile App (Expo) - Production Notes
 
-## Quick start (Docker)
-```bash
-docker compose up --build -d
-# API at http://localhost:4000
-```
+- Set API base at build time using Expo public env:
+  - macOS/Linux:
+    ```bash
+    EXPO_PUBLIC_API_BASE="https://your-api.example.com" npx expo start
+    ```
+  - In EAS builds, add `EXPO_PUBLIC_API_BASE` in Project → Build → Environment Variables.
 
-## Environment
-- `PORT` (default 4000)
-- `ADMIN_PIN` admin actions
-- `BUSINESS_NAME`, `UPI_ID`
-- `RAZORPAY_KEY_ID`, `RAZORPAY_KEY_SECRET` (mandatory for payment links)
-- `RAZORPAY_WEBHOOK_SECRET` (recommended for webhook)
-- Persisted data: volume `/app/data` mounts `data/db.json`
+- Build an Android APK/AAB:
+  ```bash
+  npm install -g eas-cli
+  eas login
+  eas build -p android --profile production
+  ```
 
-## Security
-- Adds `helmet` and rate limiting
-- CORS restrict via `CORS_ORIGIN` (optional)
-
-## Webhooks
-- Payment Link callback: `GET /payments/webhook`
-- Razorpay event webhook: `POST /payments/razorpay-webhook` with `x-razorpay-signature`
+- `App.js` reads `process.env.EXPO_PUBLIC_API_BASE` with fallback to `http://localhost:4000`.
