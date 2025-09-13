@@ -1,19 +1,28 @@
 
-# Sharma Tiffin — Real App Starter (Your Details Pre-filled)
+# Sharma Tiffin — API Server (Node/Express)
 
-This starter contains:
-- **Mobile App (Expo React Native)** with UPI intent payments to `prince190992-1@okicici` and Admin screen.
-- **API Server (Node/Express + JSON storage)** with delivery fee slabs and order management.
+## Setup
+1. Install Node.js LTS
+2. `cd api_server_node`
+3. `npm install`
+4. Copy `.env.example` to `.env` and edit values (change `ADMIN_PIN`, optional).
+5. `npm run start`
 
-## How to run (Local)
-1) API: `cd api_server_node && npm install && cp .env.example .env && npm start`
-2) App: `cd mobile_app_expo && npm install && npm run start`  
-   - If testing on a physical phone, change API base in `mobile_app_expo/src/App.js` to your **computer's LAN IP**, e.g. `http://192.168.1.10:4000`.
+## Endpoints
+- `GET /menu` – returns pricing
+- `GET /delivery/fee?km=5` – returns fee based on slabs in `../sharma-config.json`
+- `POST /orders` – create order and returns UPI intent URL for payment to `prince190992-1@okicici`
+- `POST /admin/login` – body: `{ pin }`
+- `GET /admin/orders` – list orders
+- `POST /admin/orders/:id/status` – update status
 
-## Next Up (when you're ready)
-- Add real payment gateway (Razorpay/Cashfree) for **in-app** payments and automatic status updates.
-- Replace distance field with **Google Maps distance** from your kitchen to customer address.
-- Add **auth** (customer login with OTP) and **order history**.
-- Deploy API to a cheap VPS and use a domain like `api.sharmatiffin.in`.
+## Storage
+- LowDB JSON file at `data/db.json` (no external DB needed).
 
-Your business info is set in `sharma-config.json`. Change prices or fees anytime.
+## Delivery Fee Rules
+- 0–3 km: ₹10
+- 3–6 km: ₹20
+- 6–10 km: ₹30
+- 10+ km: ₹50
+
+Edit `../sharma-config.json` to change fees or pricing.
